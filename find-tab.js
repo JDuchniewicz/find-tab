@@ -8,6 +8,10 @@ document.getElementById("find-form").addEventListener('keyup', function(e) {
         case "Enter":
 
         break;
+        case "Escape":
+            let winID = browser.windows.WINDOW_ID_CURRENT;
+            browser.windows.remove(winID);
+        break;
     // otherwise move arrows up and down the selection and highlight
         case "ArrowUp":
 
@@ -35,8 +39,8 @@ function handleMessage(request, sender, sendResponse) {
     }
     if (request.msg === "found-result") {
         let li = document.createElement("li");
-        li.innerText = request.title;
-        results.appendChild(li); // instead of just list element append div with both name of tab and link
+        li.innerText = request.title + " @ " + request.url; // how to store url for clicking? dunno yet: separate it somewhere or keep hidden in var
+        results.appendChild(li);
     }
 } 
 // sort the list on the fly, most occurences matching listed first, how about near matches?

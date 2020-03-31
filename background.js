@@ -11,8 +11,7 @@ async function find(query) {
 
 async function findMatchingTab(query, allTabs) {
     const regex = RegExp(query);
-    for (let tab of allTabs) {
-        // searching through all webpage sucks/skim titles for now?
+    for (let tab of allTabs) { // just search through tabs titles for now, maybe add in depth tab searching later?
         if (regex.test(tab.title) || tab.title.toLowerCase().includes(query)) {
             console.log(tab.title);
             browser.runtime.sendMessage({
@@ -29,8 +28,8 @@ browser.browserAction.onClicked.addListener(() => {
     let createData = {
         type: "detached_panel",
         url: "find-tab.html",
-        width: 400, // find reasonable size
-        height: 300
+        width: 600, // find reasonable size
+        height: 400
     };
     browser.windows.create(createData);
 });
