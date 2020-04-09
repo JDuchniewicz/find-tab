@@ -16,5 +16,5 @@ table#result-list td:nth-child(1) ~ td
 
 .Selected 
 {
-    background-color: blue;
+    background-color: lightblue;
 }
