@@ -3,7 +3,7 @@ let find_input = document.getElementById("find-input");
 let result_list = document.getElementById("result-list"); // to avoid FF errors, they have to be obtained each time
 
 let timeout = null;
-var selected = null;
+let selected = null;
 
 // hack to ignore reload on 'Enter' Keypress in form field
 document.getElementById("find-form").addEventListener("keypress", function(e) {
@@ -70,9 +70,9 @@ function handleMessage(request, sender, sendResponse) {
     }
     if (request.msg === "found-result") {
         let tr = document.createElement("tr");
-        let title = document.createElement("th");
-        let url = document.createElement("th");
-        let id = document.createElement("th");
+        let title = document.createElement("td");
+        let url = document.createElement("td");
+        let id = document.createElement("td");
         title.innerHTML = request.title;
         url.innerHTML = request.url;
         id.innerHTML = request.id;
@@ -90,8 +90,10 @@ function handleMessage(request, sender, sendResponse) {
                 "idx" : 0,
                 "val" : result_list.firstChild
             };
+            console.log(result_list)
             console.log(result_list.firstChild);
             console.log("SELECTED: " + selected.val.innerText);
+
         }
     }
 } 
