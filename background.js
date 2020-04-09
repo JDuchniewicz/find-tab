@@ -22,6 +22,9 @@ async function findMatchingTab(query, allTabs) {
             });
         }
     }
+    browser.runtime.sendMessage({
+        msg: "results-complete",
+    });
 }
 
 browser.browserAction.onClicked.addListener(() => {
