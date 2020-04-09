@@ -13,3 +13,8 @@ table#result-list td:nth-child(1) ~ td
 {
     display: none;
 }
+
+.Selected 
+{
+    background-color: blue;
+}

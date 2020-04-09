@@ -93,28 +93,33 @@ function handleMessage(request, sender, sendResponse) {
             console.log(result_list)
             console.log(result_list.firstChild);
             console.log("SELECTED: " + selected.val.innerText);
-
+            // add Class Selected for CSS highlight
+            selected.val.classList.add("Selected");
         }
     }
 } 
 
 function selectPreceding() {
     if (selected.idx !== 0) {
+         selected.val.classList.remove("Selected"); //remove Selected class from prev selected
         selected = {
             "idx" : selected.idx -= 1,
-            "val" : result_list.children[selected.idx - 1]
+            "val" : result_list.children[selected.idx]
         };
+        selected.val.classList.add("Selected"); // add Selected class to new selected
     }
 }
 
 function selectSuceeding() {
     let size = result_list.childElementCount;
-    console.log(size);
+    console.log(size); // console log
     if (selected.idx !== size -1) {
+        selected.val.classList.remove("Selected"); // remove Selected class from prev selected
         selected = {
             "idx" : selected.idx += 1,
-            "val" : result_list.children[selected.idx + 1]
+            "val" : result_list.children[selected.idx]
         };
+        selected.val.classList.add("Selected"); // add Selected class to new selected
     }
 }
 
