@@ -31,8 +31,8 @@ browser.browserAction.onClicked.addListener(() => {
     let createData = {
         type: "detached_panel",
         url: "find-tab.html",
-        width: 600, // find reasonable size
-        height: 400
+        width: window.screen.width / 2, // find reasonable size
+        height: window.screen.height / 2
     };
     browser.windows.create(createData);
 });
