@@ -30,7 +30,7 @@ document.addEventListener("keypress", function(e) {
     }
 })
 
-// prevent popping up the textinptu
+// prevent popping up the textinput
 document.addEventListener("keyup", function(e) {
     switch (e.key) {
         case "Enter":
@@ -64,11 +64,9 @@ window.addEventListener("keyup", function(e) {
     e.preventDefault();
 });
 
-let results = document.getElementById("result-list");
-
 function handleMessage(request, sender, sendResponse) {
     if (request.msg === "clear-results") {
-        results.innerHTML = "";
+        result_list.innerHTML = "";
     }
     if (request.msg === "found-result") {
         let tr = document.createElement("tr");
@@ -81,7 +79,7 @@ function handleMessage(request, sender, sendResponse) {
         tr.appendChild(title);
         tr.appendChild(url);
         tr.appendChild(id);
-        results.appendChild(tr);
+        result_list.appendChild(tr);
     }
     if (request.msg === "results-complete") {
         //console.log(selected);
