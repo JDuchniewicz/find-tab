@@ -1,3 +1,6 @@
+var opened = false;
+var pluginPanelId = null
+
 async function find(query) {
     browser.runtime.sendMessage({msg: "clear-results"});
 
@@ -17,7 +20,6 @@ async function findMatchingTab(query, allTabs, thisTabUrl) {
             continue;
         }
         if (regex.test(tab.title) || tab.title.toLowerCase().includes(query)) {
-            console.log(tab.title);
             browser.runtime.sendMessage({
                 msg: "found-result",
                 title: tab.title,
@@ -31,12 +33,34 @@ async function findMatchingTab(query, allTabs, thisTabUrl) {
     });
 }
 
-browser.browserAction.onClicked.addListener(() => {
+function createNewWindow() {
     let createData = {
         type: "detached_panel",
         url: "find-tab.html",
         width: window.screen.width / 2, // find reasonable size
         height: window.screen.height / 2
     };
-    browser.windows.create(createData);
+    let pluginPanel = browser.windows.create(createData);
+    waitForPanelId(pluginPanel)
+    opened = true;
+};
+
+async function waitForPanelId(pluginPanel) {
+    pluginPanelId = await pluginPanel.then(pluginPanel => pluginPanel.id);
+}
+
+browser.browserAction.onClicked.addListener(() => {
+    // check if already open
+    if (opened)
+        return;
+    createNewWindow();
+});
+
+browser.commands.onCommand.addListener(function (command) {
+    if (opened)
+        return;
+
+    if (command == "toggle-plugin") {
+        createNewWindow();
+    }
 });

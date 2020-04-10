@@ -25,5 +25,13 @@
       "gecko": {
         "strict_min_version": "57.0a1"
       }
+    },
+    "commands": {
+      "toggle-plugin": {
+        "suggested_key": {
+          "default": "Ctrl+Space"
+        },
+        "description": "Send a 'toggle-plugin' event to turn it on and off"
+      }
     }
   }
