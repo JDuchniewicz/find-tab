@@ -5,13 +5,17 @@ async function find(query) {
         return;
 
     let this_tab_url = browser.runtime.getURL("find-tab.html");
-    let tabs = await browser.tabs.query({}).then(allTabs => findMatchingTab(query, allTabs));
+    let tabs = await browser.tabs.query({}).then(allTabs => findMatchingTab(query, allTabs, this_tab_url));
 
 }
 
-async function findMatchingTab(query, allTabs) {
+async function findMatchingTab(query, allTabs, thisTabUrl) {
     const regex = RegExp(query);
     for (let tab of allTabs) { // just search through tabs titles for now, maybe add in depth tab searching later?
+        if (tab.url == thisTabUrl)
+        {
+            continue;
+        }
         if (regex.test(tab.title) || tab.title.toLowerCase().includes(query)) {
             console.log(tab.title);
             browser.runtime.sendMessage({
