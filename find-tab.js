@@ -141,6 +141,7 @@ function selectSuceeding() {
 function closeWidget() {
     let winID = browser.windows.WINDOW_ID_CURRENT;
     browser.windows.remove(winID);
+    backgroundPage.opened = false;
 }
 // sort the list on the fly, most occurences matching listed first, how about near matches?
 browser.runtime.onMessage.addListener(handleMessage);
