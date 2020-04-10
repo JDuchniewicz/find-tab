@@ -38,7 +38,6 @@ document.addEventListener("keyup", function(e) {
             {
                 //navigate to selected
                 console.log("Showing the tab: " + selected.val.children[2].innerHTML);
-                console.log(typeof(selected.val.innerHTML[2].innerHTML))
                 browser.tabs.update(parseInt(selected.val.children[2].innerHTML),
                                     { active: true });
             
@@ -141,7 +140,15 @@ function selectSuceeding() {
 function closeWidget() {
     let winID = browser.windows.WINDOW_ID_CURRENT;
     browser.windows.remove(winID);
-    backgroundPage.opened = false;
 }
+
+function handlePanelClose(windowId) {
+    if (backgroundPage.pluginPanelId == windowId)
+        backgroundPage.opened = false;
+        
+};
+
 // sort the list on the fly, most occurences matching listed first, how about near matches?
 browser.runtime.onMessage.addListener(handleMessage);
+
+browser.windows.onRemoved.addListener(handlePanelClose);

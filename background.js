@@ -1,4 +1,5 @@
 var opened = false;
+var pluginPanelId = null
 
 async function find(query) {
     browser.runtime.sendMessage({msg: "clear-results"});
@@ -39,9 +40,14 @@ function createNewWindow() {
         width: window.screen.width / 2, // find reasonable size
         height: window.screen.height / 2
     };
-    browser.windows.create(createData);
+    let pluginPanel = browser.windows.create(createData);
+    waitForPanelId(pluginPanel)
     opened = true;
 };
+
+async function waitForPanelId(pluginPanel) {
+    pluginPanelId = await pluginPanel.then(pluginPanel => pluginPanel.id);
+}
 
 browser.browserAction.onClicked.addListener(() => {
     // check if already open
