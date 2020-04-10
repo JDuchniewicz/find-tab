@@ -34,12 +34,27 @@ document.addEventListener("keypress", function(e) {
 document.addEventListener("keyup", function(e) {
     switch (e.key) {
         case "Enter":
-            //navigate to selected
-            console.log("Showing the tab: " + selected.val.children[2].innerHTML);
-            console.log(typeof(selected.val.innerHTML[2].innerHTML))
-            browser.tabs.update(parseInt(selected.val.children[2].innerHTML),
-                                { active: true });
-            closeWidget();
+            if (selected)
+            {
+                //navigate to selected
+                console.log("Showing the tab: " + selected.val.children[2].innerHTML);
+                console.log(typeof(selected.val.innerHTML[2].innerHTML))
+                browser.tabs.update(parseInt(selected.val.children[2].innerHTML),
+                                    { active: true });
+            
+                        closeWidget();
+            } else if (find_input.value !== '')
+            {
+                console.log("Opening tab: " + find_input.value)
+                let newTab = {
+                    active: true,
+                    url: "https://www.google.com/search?q=" + find_input.value
+                };
+                browser.tabs.create(newTab);
+                closeWidget();
+            } else {
+                closeWidget();
+            }
         break;
 
         case "Escape":
