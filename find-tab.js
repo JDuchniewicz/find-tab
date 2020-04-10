@@ -24,7 +24,7 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
     }
 })
 
-document.addEventListener("keypress", function(e) {
+document.addEventListener("keydown", function(e) {
     if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault();
     }
@@ -40,10 +40,11 @@ document.addEventListener("keyup", function(e) {
                 console.log("Showing the tab: " + selected.val.children[2].innerHTML);
                 browser.tabs.update(parseInt(selected.val.children[2].innerHTML),
                                     { active: true });
-            
+                
                         closeWidget();
             } else if (find_input.value !== '')
             {
+                // if no such tab exists, google it
                 console.log("Opening tab: " + find_input.value)
                 let newTab = {
                     active: true,
