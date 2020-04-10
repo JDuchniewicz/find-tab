@@ -32,11 +32,7 @@ async function findMatchingTab(query, allTabs, thisTabUrl) {
     });
 }
 
-browser.browserAction.onClicked.addListener(() => {
-    // check if already open
-    if (opened)
-        return;
-
+function createNewWindow() {
     let createData = {
         type: "detached_panel",
         url: "find-tab.html",
@@ -45,6 +41,13 @@ browser.browserAction.onClicked.addListener(() => {
     };
     browser.windows.create(createData);
     opened = true;
+};
+
+browser.browserAction.onClicked.addListener(() => {
+    // check if already open
+    if (opened)
+        return;
+    createNewWindow();
 });
 
 browser.commands.onCommand.addListener(function (command) {
@@ -52,13 +55,6 @@ browser.commands.onCommand.addListener(function (command) {
         return;
 
     if (command == "toggle-plugin") {
-        let createData = {
-            type: "detached_panel",
-            url: "find-tab.html",
-            width: window.screen.width / 2, // find reasonable size
-            height: window.screen.height / 2
-        };
-        browser.windows.create(createData);
-        opened = true;
+        createNewWindow();
     }
 });
