@@ -13,13 +13,32 @@ document.getElementById("find-form").addEventListener("keypress", function(e) {
 
 document.getElementById("find-form").addEventListener("keyup", function(e) {
     if (e.key !== "Enter" && e.key !== "Escape" && e.key !== "ArrowUp" && e.key !== "ArrowDown") {
-        selected = null;
-        clearTimeout(timeout);
+        if (result_list.childElementCount > 0 && e.key !== "Backspace") {
+            // refilter results if have some already instead of collecting them again
+            const regex = RegExp(find_input.value);
+            for (let tab of result_list.childNodes) {
+                if (!regex.test(tab.innerHTML) && !tab.innerHTML.toLowerCase().includes(find_input.value)) {
+                    if (tab.classList.contains("Selected")) {
+                        result_list.removeChild(tab);
+                        selected = { 
+                            "idx" : 0,
+                            "val" : result_list.firstChild
+                        };
+                        result_list.firstChild.classList.add("Selected");
+                    } else {
+                        result_list.removeChild(tab);
+                    }
+                }
+            }
+        } else {
+            selected = null;
+            clearTimeout(timeout);
 
-        timeout = setTimeout(() => {
-            console.log(find_input.value); // log
-            backgroundPage.find(find_input.value);
-        }, 200);
+            timeout = setTimeout(() => {
+                console.log(find_input.value); // log
+                backgroundPage.find(find_input.value);
+            }, 200);
+        }
         e.preventDefault();
     }
 })
@@ -41,7 +60,7 @@ document.addEventListener("keyup", function(e) {
                 browser.tabs.update(parseInt(selected.val.children[2].innerHTML),
                                     { active: true });
                 
-                        closeWidget();
+                closeWidget();
             } else if (find_input.value !== '')
             {
                 // if no such tab exists, google it
@@ -97,16 +116,11 @@ function handleMessage(request, sender, sendResponse) {
         result_list.appendChild(tr);
     }
     if (request.msg === "results-complete") {
-        //console.log(selected);
-        // console.log(result_list.children);
         if (selected === null && result_list.hasChildNodes()) {
-            //console.log(result_list.children);
             selected = { 
                 "idx" : 0,
                 "val" : result_list.firstChild
             };
-            console.log(result_list)
-            console.log(result_list.firstChild);
             console.log("SELECTED: " + selected.val.innerText);
             // add Class Selected for CSS highlight
             selected.val.classList.add("Selected");
@@ -127,7 +141,6 @@ function selectPreceding() {
 
 function selectSuceeding() {
     let size = result_list.childElementCount;
-    console.log(size); // console log
     if (selected.idx !== size -1) {
         selected.val.classList.remove("Selected"); // remove Selected class from prev selected
         selected = {
