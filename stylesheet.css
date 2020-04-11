@@ -1,20 +1,45 @@
 
-body
-{
-    background-color:darkgray;
+html {
+    scrollbar-width: none;
 }
 
-table#result-list td
-{
+body {
+    margin: 0;
+}
+
+hr {
+    margin-top: 0;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+}
+
+table#result-list {
+    padding-left: 0.5%;
+    padding-right: 0.5%;
+}
+
+table#result-list tr {
+    display: block;
+    border-radius: 0.15em;
+}
+
+table#result-list td {
     padding-top: 1%;
 }
 
-table#result-list td:nth-child(1) ~ td 
-{
+table#result-list td:nth-child(1) ~ td {
     display: none;
 }
 
-.Selected 
-{
-    background-color: lightblue;
+div#form {
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
 }
+
+input#find-input {
+    border: none;
+    width: 99%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+ }

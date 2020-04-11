@@ -49,6 +49,7 @@ async function waitForPanelId(pluginPanel) {
     pluginPanelId = await pluginPanel.then(pluginPanel => pluginPanel.id);
 }
 
+// Listeners
 browser.browserAction.onClicked.addListener(() => {
     // check if already open
     if (opened)

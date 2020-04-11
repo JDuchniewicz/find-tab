@@ -37,7 +37,7 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
             timeout = setTimeout(() => {
                 console.log(find_input.value); // log
                 backgroundPage.find(find_input.value);
-            }, 500);
+            }, 200);
         }
         e.preventDefault();
     }
