@@ -16,10 +16,15 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
         if (result_list.childElementCount > 0 && e.key !== "Backspace") {
             // refilter results if have some already instead of collecting them again
             const regex = RegExp(find_input.value);
-            for (let tab of result_list.childNodes) {
+            // Use while loop, sice index is not preserved correctly in for in loop when elements are removed
+            let i = 0;
+            while (i < result_list.childNodes.length)
+            {
+                let tab = result_list.childNodes[i];
                 if (!regex.test(tab.innerHTML) && !tab.innerHTML.toLowerCase().includes(find_input.value)) {
                     if (tab.classList.contains("Selected")) {
                         result_list.removeChild(tab);
+                        i -= 1;
                         selected = { 
                             "idx" : 0,
                             "val" : result_list.firstChild
@@ -27,8 +32,10 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
                         result_list.firstChild.classList.add("Selected");
                     } else {
                         result_list.removeChild(tab);
+                        i -= 1;
                     }
                 }
+                i += 1;
             }
         } else {
             selected = null;
