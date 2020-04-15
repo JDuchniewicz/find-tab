@@ -178,3 +178,5 @@ function handlePanelClose(windowId) {
 browser.runtime.onMessage.addListener(handleMessage);
 
 browser.windows.onRemoved.addListener(handlePanelClose);
+// On lost focus, close
+window.addEventListener("blur", closeWidget); 
