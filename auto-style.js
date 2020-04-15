@@ -31,7 +31,7 @@ function setStyle(theme) {
         sSheets.insertRule(".Selected {background-color: " + theme.colors.popup_highlight +";}", 0);
         //document.getElementsByClassName("Selected").style.backgroundColor = theme.colors.popup_highlight;
     } else {
-      sSheets.insertRule(".Selected {background-color: lightblue;}",0);
+      sSheets.insertRule(".Selected {background-color: Highlight;}",0);
     }
 
     if (theme.colors && theme.colors.popup_highlight_text) {

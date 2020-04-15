@@ -16,15 +16,18 @@ hr {
 table#result-list {
     padding-left: 0.5%;
     padding-right: 0.5%;
+    width: 100%;
 }
 
 table#result-list tr {
     display: block;
     border-radius: 0.15em;
+    width: 100%;
 }
 
-table#result-list td {
+table#result-list td:nth-child(1) {
     padding-top: 1%;
+    width: 100%;
 }
 
 table#result-list td:nth-child(1) ~ td {
