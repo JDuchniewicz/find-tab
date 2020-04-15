@@ -24,13 +24,15 @@ async function findMatchingTab(query, allTabs, thisTabUrl) {
                 msg: "found-result",
                 title: tab.title,
                 id: tab.id,
-                url: tab.url
+                url: tab.url,
+                query: query
             });
         }
     }
     browser.runtime.sendMessage({
-        msg: "results-complete",
+        msg: "results-complete"
     });
+    //console.log("Handled find " + query);
 }
 
 function createNewWindow() {

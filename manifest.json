@@ -1,6 +1,6 @@
 {
     "description": "Navigate to the tab you need",
-    "homepage_url": "https://www.github.com/JDuchniewicz",
+    "homepage_url": "https://www.github.com/JDuchniewicz/find-tab",
     "manifest_version": 2,
     "name": "Navigate to tab",
     "permissions": [
@@ -11,13 +11,13 @@
       "scripts": ["background.js"]
     },
     "icons": {
-      "32": "find.svg"
+      "32": "search.svg"
     },
     "browser_action": {
       "browser_style": true,
       "default_title": "Navigate to tab",
       "default_icon": {
-          "32": "find.svg"
+          "32": "search.svg"
       }
     },
     "version": "1.0",
