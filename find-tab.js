@@ -115,9 +115,9 @@ function handleMessage(request, sender, sendResponse) {
         let title = document.createElement("td");
         let url = document.createElement("td");
         let id = document.createElement("td");
-        title.innerHTML = request.title;
-        url.innerHTML = request.url;
-        id.innerHTML = request.id;
+        title.innerText = request.title;
+        url.innerText = request.url;
+        id.innerText = request.id;
         tr.appendChild(title);
         tr.appendChild(url);
         tr.appendChild(id);
@@ -179,4 +179,4 @@ browser.runtime.onMessage.addListener(handleMessage);
 
 browser.windows.onRemoved.addListener(handlePanelClose);
 // On lost focus, close
-window.addEventListener("blur", closeWidget); 
+//window.addEventListener("blur", closeWidget); 
