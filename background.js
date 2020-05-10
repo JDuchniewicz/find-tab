@@ -60,10 +60,19 @@ browser.browserAction.onClicked.addListener(() => {
 });
 
 browser.commands.onCommand.addListener(function (command) {
-    if (opened)
-        return;
-
+   
     if (command == "toggle-plugin") {
-        createNewWindow();
+        // Toggle the plugin on and off
+        if (opened)
+               browser.windows.remove(pluginPanelId); 
+        else
+            createNewWindow();
     }
+    
+    else if (command == "close-Tab") {
+        browser.runtime.sendMessage({
+            msg: "close-tab"
+        });
+    }
+
 });

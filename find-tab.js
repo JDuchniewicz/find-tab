@@ -49,13 +49,13 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
         }
         e.preventDefault();
     }
-})
+});
 
 document.addEventListener("keydown", function(e) {
     if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault();
     }
-})
+});
 
 // prevent popping up the textinput
 document.addEventListener("keyup", function(e) {
@@ -132,7 +132,31 @@ function handleMessage(request, sender, sendResponse) {
             selected = { 
                 "idx" : 0,
                 "val" : result_list.firstChild
-            };
+            }
+            //console.log("SELECTED: " + selected.val.innerText);
+            // add Class Selected for CSS highlight
+            selected.val.classList.add("Selected");
+        }
+    }
+    if (request.msg == "close-tab") {
+        console.log("Closing the selected tab!");
+        let currentSelected = selected.val;
+        index = 0;
+        for (index; index<result_list.childElementCount; index++) {
+            if (result_list.childNodes[index] == currentSelected)
+                break;
+        }
+
+        browser.tabs.remove(parseInt(currentSelected.children[2].innerHTML));
+        result_list.removeChild(currentSelected);
+
+        if (index > 0) {
+        } 
+        else if (result_list.hasChildNodes()) {
+            selected = { 
+                "idx" : 0,
+                "val" : result_list.firstChild
+            }
             //console.log("SELECTED: " + selected.val.innerText);
             // add Class Selected for CSS highlight
             selected.val.classList.add("Selected");

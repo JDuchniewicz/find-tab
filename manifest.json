@@ -32,6 +32,12 @@
           "default": "Ctrl+Space"
         },
         "description": "Send a 'toggle-plugin' event to turn it on and off"
+      },
+      "close-Tab": {
+        "suggested_key": {
+          "default": "Ctrl+E"
+        },
+        "description": "Send a 'close-Tab' event to close the currently selected tab"
       }
     }
   }
