@@ -21,7 +21,8 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
             while (i < result_list.childNodes.length)
             {
                 let tab = result_list.childNodes[i];
-                if (!regex.test(tab.innerHTML) && !tab.innerHTML.toLowerCase().includes(find_input.value)) {
+                let innerT = tab.getElementsByTagName("td")[0].innerText;
+                if (!innerT.toLowerCase().includes(find_input.value) && !regex.test(innerT)) {
                     if (tab.classList.contains("Selected")) {
                         result_list.removeChild(tab);
                         i -= 1;
@@ -29,7 +30,7 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
                             "idx" : 0,
                             "val" : result_list.firstChild
                         };
-                        result_list.firstChild.classList.add("Selected");
+                        selected.val.classList.add("Selected");
                     } else {
                         result_list.removeChild(tab);
                         i -= 1;
@@ -42,9 +43,9 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
             clearTimeout(timeout);
 
             timeout = setTimeout(() => {
-                console.log(find_input.value); // log
+                //console.log("Pre find " + find_input.value);
                 backgroundPage.find(find_input.value);
-            }, 200);
+            }, 300);
         }
         e.preventDefault();
     }
@@ -63,7 +64,7 @@ document.addEventListener("keyup", function(e) {
             if (selected)
             {
                 //navigate to selected
-                console.log("Showing the tab: " + selected.val.children[2].innerHTML);
+                //console.log("Showing the tab: " + selected.val.children[2].innerHTML);
                 browser.tabs.update(parseInt(selected.val.children[2].innerHTML),
                                     { active: true });
                 
@@ -71,7 +72,7 @@ document.addEventListener("keyup", function(e) {
             } else if (find_input.value !== '')
             {
                 // if no such tab exists, google it
-                console.log("Opening tab: " + find_input.value)
+                //console.log("Opening tab: " + find_input.value)
                 let newTab = {
                     active: true,
                     url: "https://www.google.com/search?q=" + find_input.value
@@ -114,21 +115,25 @@ function handleMessage(request, sender, sendResponse) {
         let title = document.createElement("td");
         let url = document.createElement("td");
         let id = document.createElement("td");
-        title.innerHTML = request.title;
-        url.innerHTML = request.url;
-        id.innerHTML = request.id;
+        title.innerText = request.title;
+        url.innerText = request.url;
+        id.innerText = request.id;
         tr.appendChild(title);
         tr.appendChild(url);
         tr.appendChild(id);
         result_list.appendChild(tr);
     }
     if (request.msg === "results-complete") {
-        if (selected === null && result_list.hasChildNodes()) {
+        //console.log("Obtained results for: " + request.query)
+        //console.log(result_list);
+        //console.log(result_list.hasChildNodes());
+        //console.log(selected);
+        if (result_list.hasChildNodes()) {
             selected = { 
                 "idx" : 0,
                 "val" : result_list.firstChild
             };
-            console.log("SELECTED: " + selected.val.innerText);
+            //console.log("SELECTED: " + selected.val.innerText);
             // add Class Selected for CSS highlight
             selected.val.classList.add("Selected");
         }
@@ -174,4 +179,4 @@ browser.runtime.onMessage.addListener(handleMessage);
 
 browser.windows.onRemoved.addListener(handlePanelClose);
 // On lost focus, close
-window.addEventListener("blur", closeWidget); 
+//window.addEventListener("blur", closeWidget); 

@@ -1,8 +1,8 @@
 {
-    "description": "Navigate to the tab you need",
-    "homepage_url": "https://www.github.com/JDuchniewicz",
+    "description": "Find and navigate to the tab you need",
+    "homepage_url": "https://www.github.com/JDuchniewicz/find-tab",
     "manifest_version": 2,
-    "name": "Navigate to tab",
+    "name": "Find tab",
     "permissions": [
       "find",
       "tabs"
@@ -11,19 +11,19 @@
       "scripts": ["background.js"]
     },
     "icons": {
-      "32": "find.svg"
+      "32": "search.svg"
     },
     "browser_action": {
       "browser_style": true,
-      "default_title": "Navigate to tab",
+      "default_title": "Find tab",
       "default_icon": {
-          "32": "find.svg"
+          "32": "search.svg"
       }
     },
     "version": "1.0",
     "browser_specific_settings": {
       "gecko": {
-        "strict_min_version": "57.0a1"
+        "strict_min_version": "65.0"
       }
     },
     "commands": {
