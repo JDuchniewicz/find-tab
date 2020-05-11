@@ -142,7 +142,7 @@ function handleMessage(request, sender, sendResponse) {
         console.log("Closing the selected tab!");
         let currentSelected = selected.val;
         index = 0;
-        for (index; index<result_list.childElementCount; index++) {
+        for (index; index<result_list.childElementCount; ++index) {
             if (result_list.childNodes[index] == currentSelected)
                 break;
         }
@@ -151,6 +151,7 @@ function handleMessage(request, sender, sendResponse) {
         result_list.removeChild(currentSelected);
 
         if (index > 0) {
+            selectPreceding();
         } 
         else if (result_list.hasChildNodes()) {
             selected = { 
