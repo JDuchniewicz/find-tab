@@ -14,7 +14,7 @@ hr {
 }
 
 table#result-list {
-    padding-left: 0.5%;
+   padding-left: 0.5%;
     padding-right: 0.5%;
     width: 100%;
 }
@@ -23,6 +23,8 @@ table#result-list tr {
     display: block;
     border-radius: 0.15em;
     width: 100%;
+    /*offset when scrolling at the top*/
+    scroll-margin-top:2.2em;
 }
 
 table#result-list td:nth-child(1) {
@@ -32,6 +34,14 @@ table#result-list td:nth-child(1) {
 
 table#result-list td:nth-child(1) ~ td {
     display: none;
+}
+
+form#find-form {
+    /* keeps the input field at the top
+    higher z-index => drawn on top of the rest*/
+    position: sticky;
+    top:0;
+    z-index:2;
 }
 
 div#form {

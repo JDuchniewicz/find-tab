@@ -1,5 +1,6 @@
 var opened = false;
-var pluginPanelId = null
+var pluginPanelId = null;
+var tabs = null;
 
 async function find(query) {
     browser.runtime.sendMessage({msg: "clear-results"});
@@ -40,10 +41,13 @@ function createNewWindow() {
         type: "detached_panel",
         url: "find-tab.html",
         width: window.screen.width / 2, // find reasonable size
-        height: window.screen.height / 2
+        height: window.screen.height / 2,
+        // current bug 1271047 prevents from pos being set
+        left: window.screen.width / 2, // position in the centre
+        top: window.screen.height / 2
     };
     let pluginPanel = browser.windows.create(createData);
-    waitForPanelId(pluginPanel)
+    waitForPanelId(pluginPanel);
     opened = true;
 };
 
@@ -57,6 +61,7 @@ browser.browserAction.onClicked.addListener(() => {
     if (opened)
         return;
     createNewWindow();
+    getTabs(true);
 });
 
 browser.commands.onCommand.addListener(function (command) {
@@ -64,9 +69,14 @@ browser.commands.onCommand.addListener(function (command) {
     if (command == "toggle-plugin") {
         // Toggle the plugin on and off
         if (opened)
-               browser.windows.remove(pluginPanelId); 
-        else
+        {    
+            browser.windows.remove(pluginPanelId); 
+            // opened is set to false and handled by find-tab.js by handlePanelClose
+        }
+        else {
             createNewWindow();
+            getTabs(true);
+        }
     }
     
     else if (command == "close-Tab") {
@@ -76,3 +86,15 @@ browser.commands.onCommand.addListener(function (command) {
     }
 
 });
+
+// Requests tabs, either from all windows or the current one. Stores them in the tabs variable 
+async function getTabs(lastWindow) {
+    let allTabs = await browser.tabs.query({currentWindow: lastWindow}).then(allT => tabs = allT);
+}
+
+function sendTabs() {
+    browser.runtime.sendMessage({
+        msg: "all-tabs",
+        content: tabs
+    });
+}
