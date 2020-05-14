@@ -11,6 +11,7 @@ let selected = null;
 // request all tabs from the bg script
 backgroundPage.sendTabs();
 
+
 document.getElementById("find-form").addEventListener("keyup", function(e) {
     if (e.key !== "Enter" && e.key !== "Escape" && e.key !== "ArrowUp" && e.key !== "ArrowDown") {
         if (result_list.childElementCount > 0 && e.key !== "Backspace") {
@@ -134,6 +135,7 @@ function find(query) {
             //console.log("SELECTED: " + selected.val.innerText);
             // add Class Selected for CSS highlight
             selected.val.classList.add("Selected");
+            selected.val.scrollIntoView(true);
         }
 }
 
@@ -152,7 +154,14 @@ function handleMessage(request, sender, sendResponse) {
         }
 
         browser.tabs.remove(parseInt(currentSelected.children[2].innerHTML));
-        result_list.removeChild(currentSelected);
+        result_list.removeChild(currentSelected); // remove from the table
+        // remove from array of all tabs 
+        idCurrentSelected = parseInt(currentSelected.lastChild.innerText);
+        tabsListAllWindows.splice(tabsListAllWindows.findIndex(el => el.id === idCurrentSelected), 1);
+        let indexInCurrWindow = tabsListLastWindow.findIndex(el => el.id === idCurrentSelected);
+        if (indexInCurrWindow !== -1) {
+            tabsListLastWindow.splice(indexInCurrWindow, 1);
+        } 
 
         if (index > 0) {
             selectPreceding();
@@ -186,9 +195,15 @@ function selectPreceding() {
             "idx" : selected.idx -= 1,
             "val" : result_list.children[selected.idx]
         };
-        selected.val.classList.add("Selected"); // add Selected class to new selected
-        selected.val.scrollIntoView(true);
+    } else if (result_list.childElementCount > 1) {
+        selected.val.classList.remove("Selected");
+        selected = {
+            "idx" : result_list.childElementCount - 1,
+            "val" : result_list.lastChild
+        };
     }
+    selected.val.classList.add("Selected"); // add Selected class to new selected
+    selected.val.scrollIntoView(true);
 }
 
 function selectSuceeding() {
@@ -199,9 +214,15 @@ function selectSuceeding() {
             "idx" : selected.idx += 1,
             "val" : result_list.children[selected.idx]
         };
-        selected.val.classList.add("Selected"); // add Selected class to new selected
-        selected.val.scrollIntoView(true);
+    } else {
+        selected.val.classList.remove("Selected");
+        selected = {
+            "idx" : 0,
+            "val" : result_list.firstChild
+        };
     }
+    selected.val.classList.add("Selected"); // add Selected class to new selected
+    selected.val.scrollIntoView(true);
 }
 
 function closeWidget() {
