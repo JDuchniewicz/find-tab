@@ -11,6 +11,7 @@ let selected = null;
 // request all tabs from the bg script
 backgroundPage.sendTabs();
 
+
 document.getElementById("find-form").addEventListener("keyup", function(e) {
     if (e.key !== "Enter" && e.key !== "Escape" && e.key !== "ArrowUp" && e.key !== "ArrowDown") {
         if (result_list.childElementCount > 0 && e.key !== "Backspace") {
@@ -26,11 +27,14 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
                     if (tab.classList.contains("Selected")) {
                         result_list.removeChild(tab);
                         i -= 1;
-                        selected = { 
-                            "idx" : 0,
-                            "val" : result_list.firstChild
-                        };
-                        selected.val.classList.add("Selected");
+                        if (result_list.childElementCount)
+                        {
+                            selected = { 
+                                "idx" : 0,
+                                "val" : result_list.firstChild
+                            };
+                            selected.val.classList.add("Selected");
+                        }
                     } else {
                         result_list.removeChild(tab);
                         i -= 1;
@@ -134,6 +138,7 @@ function find(query) {
             //console.log("SELECTED: " + selected.val.innerText);
             // add Class Selected for CSS highlight
             selected.val.classList.add("Selected");
+            selected.val.scrollIntoView(true);
         }
 }
 
@@ -152,7 +157,15 @@ function handleMessage(request, sender, sendResponse) {
         }
 
         browser.tabs.remove(parseInt(currentSelected.children[2].innerHTML));
-        result_list.removeChild(currentSelected);
+        result_list.removeChild(currentSelected); // remove from the table
+        // remove from array of all tabs 
+        idCurrentSelected = parseInt(currentSelected.lastChild.innerText);
+        tabsListAllWindows.splice(tabsListAllWindows.findIndex(el => el.id === idCurrentSelected), 1);
+        let indexInCurrWindow = tabsListLastWindow.findIndex(el => el.id === idCurrentSelected);
+
+        if (indexInCurrWindow !== -1) {
+            tabsListLastWindow.splice(indexInCurrWindow, 1);
+        } 
 
         if (index > 0) {
             selectPreceding();
@@ -180,7 +193,7 @@ function updateSearchMode() {
 }
 
 function selectPreceding() {
-    if (selected.idx !== 0) {
+    if (selected.idx > 0) {
          selected.val.classList.remove("Selected"); //remove Selected class from prev selected
         selected = {
             "idx" : selected.idx -= 1,
@@ -189,15 +202,33 @@ function selectPreceding() {
         selected.val.classList.add("Selected"); // add Selected class to new selected
         selected.val.scrollIntoView(true);
     }
+    else if (result_list.childElementCount > 1) {
+        selected.val.classList.remove("Selected");
+        selected = {
+            "idx" : result_list.childElementCount - 1,
+            "val" : result_list.lastChild
+        };
+        selected.val.classList.add("Selected"); // add Selected class to new selected
+        selected.val.scrollIntoView(true);
+    }
 }
 
 function selectSuceeding() {
     let size = result_list.childElementCount;
-    if (selected.idx !== size -1) {
+    if (selected.idx < size - 1) {
         selected.val.classList.remove("Selected"); // remove Selected class from prev selected
         selected = {
             "idx" : selected.idx += 1,
             "val" : result_list.children[selected.idx]
+        };
+        selected.val.classList.add("Selected"); // add Selected class to new selected
+        selected.val.scrollIntoView(true);
+    }
+    else if (result_list.childElementCount > 1) {
+        selected.val.classList.remove("Selected");
+        selected = {
+            "idx" : 0,
+            "val" : result_list.firstChild
         };
         selected.val.classList.add("Selected"); // add Selected class to new selected
         selected.val.scrollIntoView(true);
@@ -212,12 +243,10 @@ function closeWidget() {
 function handlePanelClose(windowId) {
     if (backgroundPage.pluginPanelId == windowId)
         backgroundPage.opened = false;
-        
 };
 
 // sort the list on the fly, most occurences matching listed first, how about near matches?
 browser.runtime.onMessage.addListener(handleMessage);
-
 browser.windows.onRemoved.addListener(handlePanelClose);
 // On lost focus, close
 window.addEventListener("blur", closeWidget); 
