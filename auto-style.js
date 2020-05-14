@@ -3,6 +3,7 @@ function setStyle(theme) {
     let documentBody = document.body;
     let inputFieldStyle = document.getElementById("find-input").style;
     let generalBodyStyle = document.body.style;
+    let modeIndicatorStyle = document.getElementById("mode-indicator").style;
 
     let sSheets = document.styleSheets[0];
     // General body style
@@ -15,6 +16,7 @@ function setStyle(theme) {
         // default text color
         generalBodyStyle.color = theme.colors.toolbar_field_text;
         inputFieldStyle.color = theme.colors.toolbar_field_text;
+        modeIndicatorStyle.color = theme.colors.toolbar_field_text;
     } 
 
     // Input field style
