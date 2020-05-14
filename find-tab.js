@@ -34,6 +34,8 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
                                 "val" : result_list.firstChild
                             };
                             selected.val.classList.add("Selected");
+                        } else {
+                            selected = null;
                         }
                     } else {
                         result_list.removeChild(tab);
@@ -194,7 +196,7 @@ function updateSearchMode() {
 
 function selectPreceding() {
     if (selected.idx > 0) {
-         selected.val.classList.remove("Selected"); //remove Selected class from prev selected
+        selected.val.classList.remove("Selected"); //remove Selected class from prev selected
         selected = {
             "idx" : selected.idx -= 1,
             "val" : result_list.children[selected.idx]
