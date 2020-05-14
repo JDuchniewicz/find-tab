@@ -38,6 +38,12 @@
           "default": "Ctrl+E"
         },
         "description": "Send a 'close-Tab' event to close the currently selected tab"
+      },
+      "toggle-search-mode": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+Space"
+        },
+        "description": "Send a 'toggle-search-mode' event to alter between searching through all windows and the last window"
       }
     }
   }

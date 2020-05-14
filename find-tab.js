@@ -1,9 +1,11 @@
 let backgroundPage = browser.extension.getBackgroundPage();
 let find_input = document.getElementById("find-input");
 let result_list = document.getElementById("result-list"); // to avoid FF errors, they have to be obtained each time
-let tabsList = null;
+let modeIndicator = document.getElementById("mode-indicator");
+let tabsListLastWindow = null;
+let tabsListAllWindows = null;
 
-let timeout = null;
+let searchThroughLastWindow = false;
 let selected = null;
 
 // request all tabs from the bg script
@@ -102,7 +104,9 @@ function find(query) {
         return;
     
     let this_tab_url = browser.runtime.getURL("find-tab.html");
+    let tabsList = searchThroughLastWindow ? tabsListLastWindow : tabsListAllWindows;
     const regex = RegExp(query);
+    
     for (let tab of tabsList)
     {
         if (tab.url == this_tab_url)
@@ -136,8 +140,8 @@ function find(query) {
 function handleMessage(request, sender, sendResponse) {
     if(request.msg == "all-tabs")
     {
-        tabsList = request.content;
-        console.log(tabsList);
+        tabsListLastWindow = request.tabsLastW;
+        tabsListAllWindows = request.tabsAllW;
     }
     else if (request.msg == "close-tab") {
         console.log("Closing the selected tab!");
@@ -163,7 +167,17 @@ function handleMessage(request, sender, sendResponse) {
             // add Class Selected for CSS highlight
             selected.val.classList.add("Selected");
     }
+    }
+    else if (request.msg == "toggle-search-mode") {
+        updateSearchMode();
+    }
 }
+
+function updateSearchMode() {
+    searchThroughLastWindow = !searchThroughLastWindow;
+    find_input.placeholder = 'Search through: ' + (searchThroughLastWindow ? 'Last Window' : 'All Windows');
+    modeIndicator.innerText = searchThroughLastWindow ? 'C' : 'A';
+    find(find_input.value);
 }
 
 function selectPreceding() {

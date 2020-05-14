@@ -1,6 +1,7 @@
 var opened = false;
 var pluginPanelId = null;
-var tabs = null;
+var tabsFromLastWindow = null;
+var tabsFromAllWindows = null;
 
 async function find(query) {
     browser.runtime.sendMessage({msg: "clear-results"});
@@ -61,7 +62,7 @@ browser.browserAction.onClicked.addListener(() => {
     if (opened)
         return;
     createNewWindow();
-    getTabs(true);
+    getTabs();
 });
 
 browser.commands.onCommand.addListener(function (command) {
@@ -75,7 +76,7 @@ browser.commands.onCommand.addListener(function (command) {
         }
         else {
             createNewWindow();
-            getTabs(true);
+            getTabs();
         }
     }
     
@@ -85,16 +86,23 @@ browser.commands.onCommand.addListener(function (command) {
         });
     }
 
+    else if (command == "toggle-search-mode") {
+        console.log("Toggling search mode!");
+        browser.runtime.sendMessage({msg: "toggle-search-mode"});
+    }
+
 });
 
-// Requests tabs, either from all windows or the current one. Stores them in the tabs variable 
-async function getTabs(lastWindow) {
-    let allTabs = await browser.tabs.query({currentWindow: lastWindow}).then(allT => tabs = allT);
+// Requests tabs, from all windows and the current one.
+async function getTabs() {
+    let allTabs = await browser.tabs.query({currentWindow: true}).then((allT) => {tabsFromLastWindow = allT});
+    allTabs = await browser.tabs.query({currentWindow: false}).then((allT) => {tabsFromAllWindows = allT});
 }
 
 function sendTabs() {
     browser.runtime.sendMessage({
         msg: "all-tabs",
-        content: tabs
+        tabsLastW: tabsFromLastWindow,
+        tabsAllW: tabsFromAllWindows
     });
 }
