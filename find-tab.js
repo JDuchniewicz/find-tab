@@ -9,12 +9,6 @@ let selected = null;
 // request all tabs from the bg script
 backgroundPage.sendTabs();
 
-// hack to ignore reload on 'Enter' Keypress in form field
-document.getElementById("find-form").addEventListener("keypress", function(e) {
-    if (e.key === "Enter")
-        e.preventDefault();
-});
-
 document.getElementById("find-form").addEventListener("keyup", function(e) {
     if (e.key !== "Enter" && e.key !== "Escape" && e.key !== "ArrowUp" && e.key !== "ArrowDown") {
         if (result_list.childElementCount > 0 && e.key !== "Backspace") {
@@ -45,29 +39,15 @@ document.getElementById("find-form").addEventListener("keyup", function(e) {
         } else {
             selected = null;
             find(find_input.value);
-            // TEST IF IT CAN BE WITH NO DELAY!!
-            /*
-            clearTimeout(timeout);
-
-            timeout = setTimeout(() => {
-                //console.log("Pre find " + find_input.value);
-                find(find_input.value);
-            }, 300);*/
         }
-        e.preventDefault();
-    }
-});
-
-document.addEventListener("keydown", function(e) {
-    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-        e.preventDefault();
     }
 });
 
 // prevent popping up the textinput
-document.addEventListener("keyup", function(e) {
+document.addEventListener("keydown", function(e) {
     switch (e.key) {
         case "Enter":
+            e.preventDefault();
             if (selected)
             {
                 //navigate to selected
@@ -92,18 +72,20 @@ document.addEventListener("keyup", function(e) {
         break;
 
         case "Escape":
+            e.preventDefault();
             closeWidget();
         break;
 
         case "ArrowUp":
+            e.preventDefault();
             selectPreceding(); 
         break;
 
         case "ArrowDown":
+            e.preventDefault();
             selectSuceeding();
         break;
     }
-    e.preventDefault();
 });
 
 window.addEventListener("keyup", function(e) {
@@ -112,65 +94,6 @@ window.addEventListener("keyup", function(e) {
     }
     e.preventDefault();
 });
-/*
-function handleMessage(request, sender, sendResponse) {
-    if (request.msg === "clear-results") {
-        result_list.innerHTML = "";
-    }
-    if (request.msg === "found-result") {
-        let tr = document.createElement("tr");
-        let title = document.createElement("td");
-        let url = document.createElement("td");
-        let id = document.createElement("td");
-        title.innerText = request.title;
-        url.innerText = request.url;
-        id.innerText = request.id;
-        tr.appendChild(title);
-        tr.appendChild(url);
-        tr.appendChild(id);
-        result_list.appendChild(tr);
-    }
-    if (request.msg === "results-complete") {
-        //console.log("Obtained results for: " + request.query)
-        //console.log(result_list);
-        //console.log(result_list.hasChildNodes());
-        //console.log(selected);
-        if (result_list.hasChildNodes()) {
-            selected = { 
-                "idx" : 0,
-                "val" : result_list.firstChild
-            }
-            //console.log("SELECTED: " + selected.val.innerText);
-            // add Class Selected for CSS highlight
-            selected.val.classList.add("Selected");
-        }
-    }
-    if (request.msg == "close-tab") {
-        console.log("Closing the selected tab!");
-        let currentSelected = selected.val;
-        index = 0;
-        for (index; index<result_list.childElementCount; ++index) {
-            if (result_list.childNodes[index] == currentSelected)
-                break;
-        }
-
-        browser.tabs.remove(parseInt(currentSelected.children[2].innerHTML));
-        result_list.removeChild(currentSelected);
-
-        if (index > 0) {
-            selectPreceding();
-        } 
-        else if (result_list.hasChildNodes()) {
-            selected = { 
-                "idx" : 0,
-                "val" : result_list.firstChild
-            }
-            //console.log("SELECTED: " + selected.val.innerText);
-            // add Class Selected for CSS highlight
-            selected.val.classList.add("Selected");
-        }
-    }
-}*/
 
 function find(query) {
     result_list.innerHTML = '';
@@ -284,4 +207,4 @@ browser.runtime.onMessage.addListener(handleMessage);
 
 browser.windows.onRemoved.addListener(handlePanelClose);
 // On lost focus, close
-//window.addEventListener("blur", closeWidget); 
+window.addEventListener("blur", closeWidget); 
