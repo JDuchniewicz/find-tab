@@ -87,7 +87,6 @@ browser.commands.onCommand.addListener(function (command) {
     }
 
     else if (command == "toggle-search-mode") {
-        console.log("Toggling search mode!");
         browser.runtime.sendMessage({msg: "toggle-search-mode"});
     }
 
@@ -95,8 +94,8 @@ browser.commands.onCommand.addListener(function (command) {
 
 // Requests tabs, from all windows and the current one.
 async function getTabs() {
-    let allTabs = await browser.tabs.query({currentWindow: true}).then((allT) => {tabsFromLastWindow = allT});
-    allTabs = await browser.tabs.query({currentWindow: false}).then((allT) => {tabsFromAllWindows = allT});
+    await browser.tabs.query({currentWindow: true}).then((allT) => {tabsFromLastWindow = allT});
+    await browser.tabs.query({currentWindow: false}).then((allT) => {tabsFromAllWindows = allT});
 }
 
 function sendTabs() {

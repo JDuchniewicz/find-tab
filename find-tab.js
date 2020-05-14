@@ -144,7 +144,6 @@ function handleMessage(request, sender, sendResponse) {
         tabsListAllWindows = request.tabsAllW;
     }
     else if (request.msg == "close-tab") {
-        console.log("Closing the selected tab!");
         let currentSelected = selected.val;
         index = 0;
         for (index; index<result_list.childElementCount; ++index) {
