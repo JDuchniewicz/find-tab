@@ -8,6 +8,14 @@ let tabsListAllWindows = null;
 let searchThroughLastWindow = false;
 let selected = null;
 
+// Since FF 89 callbacks have to be registered before background scripts calls the callback func
+// sort the list on the fly, most occurences matching listed first, how about near matches?
+browser.runtime.onMessage.addListener(handleMessage);
+browser.windows.onRemoved.addListener(handlePanelClose);
+
+// On lost focus, close
+window.addEventListener("blur", closeWidget); 
+
 // request all tabs from the bg script
 backgroundPage.sendTabs();
 
@@ -246,9 +254,3 @@ function handlePanelClose(windowId) {
     if (backgroundPage.pluginPanelId == windowId)
         backgroundPage.opened = false;
 };
-
-// sort the list on the fly, most occurences matching listed first, how about near matches?
-browser.runtime.onMessage.addListener(handleMessage);
-browser.windows.onRemoved.addListener(handlePanelClose);
-// On lost focus, close
-window.addEventListener("blur", closeWidget); 
